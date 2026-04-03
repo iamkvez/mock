@@ -11,21 +11,46 @@ myElement.findViewById<TextView>(R.id.title).text = "Привет!"
 // Добавляем в контейнер
 container.addView(myElement)
 
+====================================
+
 val myView = MyCustomView(this)
 container.addView(myView)
 
-<androidx.drawerlayout.widget.DrawerLayout 
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <FrameLayout ... />
+========/=/=/=/=/=/=//4/=_=_÷_÷_=<=>2_÷_=<_=
+import kotlinx.coroutines.*
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"  android:layout_height="match_parent"
-        android:layout_gravity="start" />
+private var timerJob: Job? = null
+private var timeInMillis = 0L
 
-</androidx.drawerlayout.widget.DrawerLayout>
+fun startTimer() {
+    timerJob = CoroutineScope(Dispatchers.Main).launch {
+        while (isActive) {
+            timeInMillis += 10
+            updateText(timeInMillis)
+            delay(10) // Задержка 10 мс
+        }
+    }
+}
+
+private fun updateText(time: Long) {
+    val minutes = (time / 1000) / 60
+    val seconds = (time / 1000) % 60
+    // Если нужно именно 00:00 формат:
+    findViewById<TextView>(R.id.timerText).text = 
+        String.format("%02d:%02d", minutes, seconds)
+}
+
+fun stopTimer() {
+    timerJob?.cancel()
+}
+
+//=/=/=/=/=/=_÷>÷_=>÷_=[=_=[#_÷>=_=_÷/#>=_÷>=_=
+val navView = findViewById<NavigationView>(R.id.nav_view)
+val params = navView.layoutParams
+// Устанавливаем ширину равной ширине экрана
+params.width = resources.displayMetrics.widthPixels
+navView.layoutParams = params
+
 
 
